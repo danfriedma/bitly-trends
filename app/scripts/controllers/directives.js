@@ -9,122 +9,138 @@ angular.module('directives', ['services'])
 	return {
 		restrict: 'EA',
 		scope: {
-			data: '=' // bi-directional data-binding
+			data: '=',
+			range: '='
 		},
 		link: function (scope, element, attrs) {
 			d3Service.d3().then(function(d3) {
 
 				var renderTimeout;
 				var data = [];
+				var range = [];
 
-				var margin = {top: 40, right: 80, bottom: 30, left: 50};
+				var margin = {top: 30, right: 30, bottom: 30, left: 30};
 
-				var color = d3.scale.category10();
+				$window.onresize = function() {
+					scope.$apply();
+				};
 
-				var svg = d3.select("body").append("svg")
+				scope.$watch(function() {
+					return angular.element($window)[0].innerWidth;
+				}, function() {
+					scope.render(scope.data, scope.range, 1);
+				});
+
+				scope.$watch('data', function(newData) {
+					scope.render(newData, scope.range, 1);
+				}, true);
+
+				scope.$watch('range', function(newRange) {
+					scope.render(scope.data, newRange, 0);
+				}, true);
+
+				var svg = d3.select('body').append('svg')
 					.style('width', '100%')
 					.style('height', '100%');
 
-				var tooltip = d3.select("body").append("div")
-					.attr("class", "tooltip")               
-					.style("opacity", 0);
+				var tooltip = d3.select('body').append('div')
+					.attr('class', 'tooltip')
+					.style('opacity', 0);
 
-			    $window.onresize = function() {
-			        scope.$apply();
-			    };
+				scope.render = function(data, range, resize) {
 
-			    scope.$watch(function() {
-			        return angular.element($window)[0].innerWidth;
-			    }, function() {
-			        scope.render(scope.data, 1);
-			    });
+					if(resize){
+						svg.selectAll('*').remove();
+					}
 
-			    scope.$watch('data', function(newData) {
-			        scope.render(newData, 0);
-			    }, true);
+					if (jQuery.isEmptyObject(data)) { return; }
 
-			    scope.render = function(data, resize) {
-		        
-			      	if(resize){
-			      		svg.selectAll('*').remove();
-			      	}
+					if(renderTimeout) { clearTimeout(renderTimeout); }
 
-			        if (jQuery.isEmptyObject(data)) return;
+					renderTimeout = $timeout(function() {
 
-			        if(renderTimeout) clearTimeout(renderTimeout);
-
-			        renderTimeout = $timeout(function() {
-
-			        var w = d3.select("body").node().offsetWidth;
-					var h = d3.select("body").node().offsetHeight;
+					var width = d3.select('body').node().offsetWidth;
+					var height = d3.select('body').node().offsetHeight;
 
 					var x = d3.scale.linear()
-					    .range([0, w]);
+						.range([0, width]);
 
 					var y = d3.scale.log()
-					    .range([h - margin.top - margin.bottom , 0]);
+						.range([height - margin.bottom, margin.top]);
 
-				    var line = d3.svg.line()
-				   		.interpolate("cardinal")
-				   		.x(function(d, i) { return x(i); })
-				   		.y(function(d) { return y(d.rate); });
+					var line = d3.svg.line()
+						.interpolate('cardinal')
+						.x(function(d) { return x(d.time); })
+						.y(function(d) { return y(d.rate); });
 
-			      	var nest = d3.nest()
-				        	.key(function(d) { return d.phrase })
-				        	.entries(data);
+					var xmax = d3.max(data, function(p) { return d3.max(p.times, function(t) { return t.time; }); });
+					var xmin = xmax - range.seconds;
+					
+					x.domain([xmin, xmax]);
 
-					x.domain([0, nest[0].values.length - 1]);
+					var ymax = d3.max(data, function(p) { return d3.max(p.times, function(t) { return t.rate; }); });
+					/*var ymin = d3.min(data, function(p) { return d3.max(p.times, function(t) { return t.rate; }); });*/
 
-					y.domain([
-						d3.min(nest, function(p) { return d3.min(p.values, function(v) { return v.rate }); }),
-					    .5 + d3.max(nest, function(p) { return d3.max(p.values, function(v) { return v.rate }); })
-					]);
+					y.domain([ .55, ymax]);
 
-					var url = function(d) {
-						return d[0].urls[0].aggregate_url;
-					}
-						
-					var getphrase = function(d) {
-						console.log(d[0].phrase);
-						return d[0].phrase;
-					}
+					var color = d3.scale.linear()
+						.domain([.55, ymax])
+						.range(["blue", "red"]);
 
-				  	var phrase = svg.selectAll(".phrase")
-				      	.data(nest)
-				    	.enter().append("a")
-				      	.attr("class", "phrase")
-				      	.attr("xlink:href", function(d) { return url(d.values); })
-				      	.attr("xlink:show", "new")
-				      	.on("mouseover", function(d) {      
-			    		tooltip.text(getphrase(d.values))
-			    		  	.style("left", (d3.event.pageX + 10) + "px")     
-			        		.style("top", (d3.event.pageY - 30) + "px");   
-			    		tooltip.transition()        
-			        		.duration(200)      
-			        		.style("opacity", .6);      
-			        	})
-						.on("mouseout", function(d) {       
-		    			tooltip.transition()        
-		        			.duration(500)      
-		        			.style("opacity", 0);   
+					var phrase = svg.selectAll('.phrase')
+						.data(data)
+						.enter().append('a')
+						.attr('class', 'phrase')
+						.attr('xlink:href', function(d) { return d.url; })
+						.attr('xlink:show', 'new')
+						.on('mouseover', function(d) {
+							tooltip.text(d.phrase)
+							  	.style('left', (d3.event.pageX + 10) + 'px')
+								.style('top', (d3.event.pageY - 30) + 'px');
+							tooltip.transition()
+								.duration(200)
+								.style('opacity', .6);
+						})
+						.on('mouseout', function(d) {
+							tooltip.transition()
+								.duration(500)
+								.style('opacity', 0);
 						});
 
-					phrase.append("path")
-					    .attr("class", "line")
-					    .attr("d", function(d) { return line(d.values); })
-					    .style("stroke", function(d) { return color(d.key); });
+					phrase.append('path')
+						.attr('class', 'line')
+						.attr('d', function(d) { return line(d.times); })
+						.style('stroke', function(d) { return color(d3.max(d.times, function(t) { return t.rate; })); })
+						.style('stroke-width', 4.5);
 
-					d3.selectAll("path")
-					    .data(nest)
-					  	.transition()
-					    .duration(500)
-						.attr("d", function(d) { return line(d.values); });
+					d3.selectAll('path')
+						.data(data)
+						.transition()
+						.duration(3000)
+						.attr('d', function(d) { return line(d.times); });
 
-			        }, 200);
+					}, 200);
 	  			}
-
-	  			scope.render(data, 1);
 			})
 		}
 	}
 }])
+.directive('header', function() {
+	return {
+		restrict: 'E',
+		replace: true,
+		template: '<div><h1 class="title">bit.ly trends<br><span class="intro">Hover to explore  //  Click to read</span></h1></div>'
+	};
+})
+.directive('selector', function() {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {
+			ranges: '=',
+			range: '=',
+		},
+		replace: true,
+		template: '<form class="selector pure-form"><select ng-model="range" ng-options="r.name for r in ranges" class="selector"></select></form>'
+	};
+});

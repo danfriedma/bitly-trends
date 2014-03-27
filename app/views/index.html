@@ -13,6 +13,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(app) styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/pure/pure.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
@@ -25,11 +26,10 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ng-controller="SocketCtrl">
-      <h1 class="title">bit.ly trends<br><span class="intro">Hover to explore<br>Click to read</span><script>setTimeout(function(){ 
-              $(".intro").fadeOut("slow"); 
-            }, 8000 ); </script></h1>
-      <d3-graph data="data"></d3-graph>
+    <div ng-controller="Ctrl">
+      <header></header>
+      <selector range="range" ranges="ranges"></selector>
+      <d3-graph data="data" range="range"></d3-graph>
     </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
