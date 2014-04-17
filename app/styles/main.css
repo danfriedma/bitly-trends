@@ -1,41 +1,100 @@
-/* Space out content a bit */
-body {
+html, body {
   margin: 0;
   height: 100%;
+  font-family: Geneva, Tahoma, Verdana, sans-serif;
 }
+
+/*.modal {
+display: block;
+}
+
+.hide {
+    display: none;
+}*/
+/*
+.modal-body:before,
+.modal-body:after {
+display: table;
+content: " ";
+}
+.modal-header:before,
+.modal-header:after {
+display: table;
+content: " ";
+}*/
+
+/*.modal.ng-animte-active {
+    opacity: 1;
+    display: block;
+}*/
 
 .title {
   position: absolute;
   margin: .5em;
-  font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
-  font-size: 2.5em;
   z-index: -1;
+  font-size: 2.5em;
 }
 
-.selector {
+ul, li {
+  display: inline-block;
+  list-style-type: none;
+  margin: .5em;
+}
+
+.menu {
+  display: inline;
   position: absolute;
   top: 0;
   right: 0;
   margin: .5em;
+  margin-top: 1em;
   z-index: 1;
 }
 
-.intro {
-  font-size: .5em;
-  -webkit-transition: all 6s ease-in-out;
-  -webkit-transition-duration: 2s; 
-  -moz-transition: all 6s ease-in-out;
-  -moz-transition-duration: 2s; 
-  -ms-transition: all 6s ease-in-out;
-  -ms-transition-duration: 2s; 
-  -o-transition: all 6s ease-in-out;
-  -o-transition-duration: 2s; 
-  transition: all 6s ease-in-out;
-  transition-duration: 2s;
-/*  animation-delay: 6s; 
-  animation-duration: 2s; */
+.about {
+  text-align: center;
+  margin: .3em;
+  margin-bottom: .6em;
 }
 
+.github {
+  text-align: right;
+  margin: 0;
+  opacity: 0.75;
+}
+
+.github:hover {
+  opacity: 1.0;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.modal-button {
+  display: block;
+  margin: 0 auto; 
+  width: 40%;
+}
+
+.clean-button {
+  border: none;
+  background: transparent;
+  opacity: 0.75;
+}
+
+.clean-button:hover {
+  background: transparent;
+  opacity: 1.0;
+}
+
+.clean-button:active {
+  box-shadow: none;
+}
+
+.reveal-modal, .reveal-modal-bg {
+  z-index: 99;
+}
 
 .axis path,
 .axis line {
@@ -56,9 +115,8 @@ body {
 .tooltip {   
   position: absolute;           
   text-align: center;                                    
-  font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
   font-size: 1.8em;
   border: 0px;      
   border-radius: 8px;
-  pointer-events: none;         
+  pointer-events: none;   
 }

@@ -6,6 +6,7 @@
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
+require('newrelic');
 var WebSocketServer = require('ws').Server
   , http = require('http')
   , express = require('express')
@@ -29,16 +30,18 @@ require('./lib/routes')(app);
 
 require('./lib/streamtools')(app);
 
+require('./lib/cronjob')(app);
+
 // Expose app
 exports = module.exports = app;
-
 
 
 // Server for client websockets
 var server = http.createServer(app);
 server.listen(port);
 
-var wss = new WebSocketServer({server: server});
+
+/*var wss = new WebSocketServer({server: server});
 console.log('Server created');
 wss.on('connection', function(ws) {
 
@@ -51,5 +54,5 @@ wss.on('connection', function(ws) {
 wss.broadcast = function(data) {
   for(var i in this.clients)
   this.clients[i].send(data);
-};
+};*/
 

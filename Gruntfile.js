@@ -326,6 +326,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             'package.json',
+            'newrelic.js',
             'server.js',
             'lib/**/*'
           ]

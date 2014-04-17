@@ -14,6 +14,8 @@
     <!-- build:css(app) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/pure/pure.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/angular-dialog-service/dialogs.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
@@ -27,9 +29,12 @@
 
     <!-- Add your site or application content here -->
     <div ng-controller="Ctrl">
-      <header></header>
-      <selector range="range" ranges="ranges"></selector>
-      <d3-graph data="data" range="range"></d3-graph>
+      <title></title>
+      <ul class="menu">
+        <li><about></about></li>
+        <li><selector select="select" ranges="ranges"></selector></li>
+      </ul>  
+      <d3-graph data="data" select="select"></d3-graph>
     </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -51,8 +56,13 @@
     <!-- bower:js -->
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/angular-socket-io/socket.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-dialog-service/dialogs.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

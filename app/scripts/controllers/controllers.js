@@ -1,34 +1,57 @@
 'use strict';
 
-angular.module('controllers', [])
-.controller('Ctrl', function($scope, $http) {
+angular.module('controllers', ['ui.bootstrap','dialogs'])
+.controller('Ctrl', function($scope, $http, $dialogs) {
+
 
 	$scope.data = [];
 
 	$scope.ranges = [
-		{name: 'last 5 minutes', seconds: 300},
-		{name: 'last 30 minutes', seconds: 1800},
-		{name: 'last hour', seconds: 3600}
+		{ label: 'last 5 minutes', seconds: 300},
+		{ label: 'last 30 minutes', seconds: 1800},
+		{ label: 'last hour', seconds: 3600}
 	];
 
-	$scope.range = $scope.ranges[1];
-	
+	$scope.select = {};
+	$scope.select.seconds = $scope.ranges[2].seconds;
+
 	window.onload = function() {
-		$http.get('/api/lines')
+		getlines($scope.select.seconds);
+
+	};
+
+	var getlines = function(range) {
+		$http.get("/lines/" + range)
 			.success(function(data) {
 				$scope.data = data;
 			})
 			.error(function(data) {
 				console.log('error');
 			});
+	}
+
+
+	$scope.open = function() {
+
+		var dlg = $dialogs.create('/about', 'dialogCtrl', [$scope.ranges, $scope.select], {});
+		dlg.result.then(function(seconds){
+			$scope.select.seconds = seconds;
+		}, function(){
+		});
+	}
+
+})
+.controller('dialogCtrl', function($scope, $modalInstance, data) {
+
+	$scope.ranges = data[0];
+	$scope.select = data[1];
+
+	$scope.ok = function() {
+		$modalInstance.close($scope.select.seconds);
 	};
 
-// For making a websocket connection to server
-/*	window.onload = function() {
-		var host = location.origin.replace(/^http/, 'ws')
-		var ws = new WebSocket(host);
-		ws.onmessage = function (event) {
-			$scope.$apply($scope.data.push(JSON.parse(event.data)));
-		};
-	}*/
+	$scope.cancel = function() {
+		$modalInstance.dismiss('cancel');
+	}
+
 });
