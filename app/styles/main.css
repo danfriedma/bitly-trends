@@ -4,35 +4,24 @@ html, body {
   font-family: Geneva, Tahoma, Verdana, sans-serif;
 }
 
-/*.modal {
-display: block;
+.graph-container {
+  height: 100%;
+  padding: 0;
 }
-
-.hide {
-    display: none;
-}*/
-/*
-.modal-body:before,
-.modal-body:after {
-display: table;
-content: " ";
-}
-.modal-header:before,
-.modal-header:after {
-display: table;
-content: " ";
-}*/
-
-/*.modal.ng-animte-active {
-    opacity: 1;
-    display: block;
-}*/
 
 .title {
-  position: absolute;
-  margin: .5em;
-  z-index: -1;
+  margin: 0;
   font-size: 2.5em;
+}
+
+.navbar-override {
+  margin-bottom: 0;
+  border: none;
+  background: transparent;
+}
+
+.navbar-menu {
+  margin-right: .3em !important;
 }
 
 ul, li {
@@ -41,30 +30,23 @@ ul, li {
   margin: .5em;
 }
 
-.menu {
-  display: inline;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: .5em;
-  margin-top: 1em;
-  z-index: 1;
-}
-
 .about {
   text-align: center;
-  margin: .3em;
-  margin-bottom: .6em;
+  margin: 1em .3em .6em .3em;
 }
 
 .github {
-  text-align: right;
-  margin: 0;
+  display: block;
+  margin: 0 0 0 auto;
   opacity: 0.75;
 }
 
 .github:hover {
   opacity: 1.0;
+}
+
+.selector {
+  margin: .2em;
 }
 
 a:hover {
@@ -75,16 +57,21 @@ a:hover {
   display: block;
   margin: 0 auto; 
   width: 40%;
+  height: 3em;
 }
 
 .clean-button {
+  margin: .5em 1em;
+  padding: 0;
   border: none;
   background: transparent;
+  background-color: transparent;
   opacity: 0.75;
 }
 
-.clean-button:hover {
+.clean-button:hover, .clean-button:focus {
   background: transparent;
+  background-image: none; 
   opacity: 1.0;
 }
 
@@ -98,18 +85,28 @@ a:hover {
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+  /*fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;*/
+  display: none;
+}
+
+.axis-text {
+  font-size: 3em;
+  opacity: 0.5;
+}
+
+.domain {
+  visibility: hidden;
 }
 
 .line {
   fill: none;
-  opacity: 0.3;
+  opacity: 0.35;
 }
 
 .line:hover {
-  opacity:1;
+  opacity: 1.0;
 }
 
 .tooltip {   

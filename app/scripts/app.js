@@ -4,4 +4,4 @@ angular.module('bitlyTrendsApp', [
   'controllers',
   'services',
   'directives'
-])
+]);

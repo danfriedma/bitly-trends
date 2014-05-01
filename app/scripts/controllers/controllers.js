@@ -3,7 +3,6 @@
 angular.module('controllers', ['ui.bootstrap','dialogs'])
 .controller('Ctrl', function($scope, $http, $dialogs) {
 
-
 	$scope.data = [];
 
 	$scope.ranges = [
@@ -20,16 +19,20 @@ angular.module('controllers', ['ui.bootstrap','dialogs'])
 
 	};
 
+	$scope.$watch('select', function(newSelect) {
+		getlines(newSelect.seconds);
+	}, true);
+
+
 	var getlines = function(range) {
-		$http.get("/lines/" + range)
+		$http.get('/lines/' + range)
 			.success(function(data) {
-				$scope.data = data;
+				$.extend($scope.data, data);
 			})
 			.error(function(data) {
-				console.log('error');
+				console.log('error' + data);
 			});
-	}
-
+	};
 
 	$scope.open = function() {
 
@@ -38,7 +41,7 @@ angular.module('controllers', ['ui.bootstrap','dialogs'])
 			$scope.select.seconds = seconds;
 		}, function(){
 		});
-	}
+	};
 
 })
 .controller('dialogCtrl', function($scope, $modalInstance, data) {
@@ -52,6 +55,6 @@ angular.module('controllers', ['ui.bootstrap','dialogs'])
 
 	$scope.cancel = function() {
 		$modalInstance.dismiss('cancel');
-	}
+	};
 
 });
