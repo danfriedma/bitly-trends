@@ -190,6 +190,7 @@ angular.module('directives', ['services'])
 						height = d3.select('div.graph-container').node().offsetHeight;
 
 						xmax = d3.max(data, function(p) { return d3.max(p.times, function(t) { return t.time; }); });
+						/*xmin = d3.min(data, function(p) { return d3.min(p.times, function(t) { return t.time; }); });*/
 						xmin = xmax - range.seconds;
 
 						ymax = d3.max(data, function(p) { return d3.max(p.times, function(t) { return t.rate; }); });
@@ -280,7 +281,7 @@ angular.module('directives', ['services'])
 						d3.selectAll('path')
 							.data(data)
 							.transition()
-							.duration(400)
+							.duration(700)
 							.attr('d', function(d) { return line(d.times); });
 
 						d3.selectAll('path')
@@ -290,26 +291,26 @@ angular.module('directives', ['services'])
 
 						svg.select('.yaxis')
 							.transition()
-							.duration(400)
+							.duration(700)
 							.ease('poly(5)-in-out')
 							.call(yAxis);
 
 						svg.select('.xaxis')
 							.transition()
-							.duration(400)
+							.duration(700)
 							.ease('poly(5)-in-out')
 							.attr('transform', 'translate(0, ' + (height - 30) + ')')
 							.call(xAxis);
 
 						svg.select('.yaxis-text')
 							.transition()
-							.duration(400)
+							.duration(700)
 							.ease('poly(5)-in-out')
 							.attr('x', -height);
 
 						svg.select('.xaxis-text')
 							.transition()
-							.duration(400)
+							.duration(700)
 							.ease('poly(5)-in-out')
 							.attr('x', width);
 

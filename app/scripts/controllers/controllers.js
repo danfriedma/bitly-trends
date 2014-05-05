@@ -14,11 +14,6 @@ angular.module('controllers', ['ui.bootstrap','dialogs'])
 	$scope.select = {};
 	$scope.select.seconds = $scope.ranges[2].seconds;
 
-	window.onload = function() {
-		getlines($scope.select.seconds);
-
-	};
-
 	$scope.$watch('select', function(newSelect) {
 		getlines(newSelect.seconds);
 	}, true);
@@ -27,7 +22,7 @@ angular.module('controllers', ['ui.bootstrap','dialogs'])
 	var getlines = function(range) {
 		$http.get('/lines/' + range)
 			.success(function(data) {
-				$.extend($scope.data, data);
+				jQuery.extend($scope.data, data);
 			})
 			.error(function(data) {
 				console.log('error' + data);
@@ -41,6 +36,12 @@ angular.module('controllers', ['ui.bootstrap','dialogs'])
 			$scope.select.seconds = seconds;
 		}, function(){
 		});
+	};
+
+	window.onload = function() {
+		
+		getlines($scope.select.seconds);
+		$scope.open();
 	};
 
 })
